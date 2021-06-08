@@ -71,6 +71,29 @@ router.post('/', async (req, res) => {
     }
   });
 
+// UPDATE USER
+router.put('/:id', withAuth, (req, res) => {
+    try {
+        const userData = await User.update(req.body, {
+            individualHooks: true,
+            where: {
+                id: req.params.id
+            }
+        })
+        if (!userData) {
+            res
+              .status(400)
+              .json({ message: 'Incorrect user id, please try again' });
+            return;
+          }
+          res.status(200).json(userDetails);
+      
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  });
+
+
 // DELETE USER
 router.delete('/:id', withAuth, (req, res) => {
     try {
