@@ -77,3 +77,10 @@ router.get('/edit/:id', withAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// Renders new post page
+router.get('./newpost', (req, res) => {
+  res.render('new-posts');
+});
+
+module.exports = router;
