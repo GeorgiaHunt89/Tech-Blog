@@ -115,5 +115,25 @@ router.delete('/:id', withAuth, (req, res) => {
     }
   });
 
+
+// DISPLAY USER DATA
+router.get('/', (req, res) => {
+    try {
+        const userData = await User.findAll({    
+            attributes: { exclude: ['[password']}
+        })
+        if (!userData) {
+            res
+              .status(400)
+              .json({ message: 'Error' });
+            return;
+          }
+          res.status(200).json(userDetails);
+      
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  });
+
   module.exports = router;
    
