@@ -31,16 +31,15 @@ router.get('/', withAuth, async (req, res) => {
               },
         ]
     });
-    res.status(200).json(newPost);
+    res.status(200).json(postData);
   } catch (err) {
     res.status(400).json(err);
   }
 });
 
 
-// CREATE new post
+// CREATE POST
 router.post('/', withAuth, async (req, res) => {
-
     try {
       const newPost = await Post.create({
         title: req.body.title,
@@ -53,3 +52,28 @@ router.post('/', withAuth, async (req, res) => {
   res.status(400).json(err);
 }
 });
+
+
+// UPDATE POST
+router.put('/', withAuth, async (req, res) => {
+    try {
+      const updatePost = await Post.update({
+        title: req.body.title,
+        post_text: req.body.post_text
+      },
+      {
+        where: {
+          id: req.params.id
+        },
+      });
+      if (!updatePost) {
+        res.status(404).json({ message: 'No post found with this id!' });
+        return;
+      }
+  
+      res.status(200).json(updatePost);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+    
