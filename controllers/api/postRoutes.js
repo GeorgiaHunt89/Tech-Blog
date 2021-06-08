@@ -5,7 +5,7 @@ const sequelize = require('../../config/connection');
 
 // GET POST renders all posts 
 router.get('/', withAuth, async (req, res) => {
-    console.log(req.session);
+
   try {
     const postData = await Post.findAll({
         attributes: [
@@ -37,3 +37,19 @@ router.get('/', withAuth, async (req, res) => {
   }
 });
 
+
+// CREATE new post
+router.post('/', withAuth, async (req, res) => {
+
+    try {
+      const newPost = await Post.create({
+        title: req.body.title,
+        post_text: req.body.post_text,
+        user_id: req.session.user_id
+    });
+
+    res.status(200).json(newPost);
+} catch (err) {
+  res.status(400).json(err);
+}
+});
