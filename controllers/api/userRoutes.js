@@ -1,5 +1,5 @@
-const router = require('express').Router();
-const { User, Post, Comment } = require('../../models');
+const router = require('express').Router();   
+const { User } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 // CREATE new user
@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
         return;
       }
   
-      const validPassword = await user.checkPassword(req.body.password);
+      const validPassword = await User.checkPassword(req.body.password);
   
       if (!validPassword) {
         res
@@ -47,7 +47,7 @@ router.post('/', async (req, res) => {
         return;
       }
         // excludes password
-      const { password, ...userDetails } = user.get({ plain: true });
+      const { password, ...userDetails } = User.get({ plain: true });
   
       req.session.save(() => {
         req.session.user = userDetails;
@@ -138,7 +138,7 @@ router.get('/data', (req, res) => {
       res.status(400).json(err);
     }
   });
-  
+
 
   module.exports = router;
    
