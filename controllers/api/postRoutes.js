@@ -76,4 +76,29 @@ router.put('/', withAuth, async (req, res) => {
       res.status(500).json(err);
     }
   });
+
+
+// DELETE POST
+router.delete('/:id', withAuth, (req, res) => {
+  try {
+      const deletePost = await User.destroy({
+          where: {
+              id: req.params.id,
+              user_id: req.session.user_id,
+          },
+      })
+      if (!deletePost) {
+          res
+            .status(400)
+            .json({ message: 'Incorrect id, please try again' });
+          return;
+        }
+        res.status(200).json(deletePost);
+    
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+  module.exports = router;
     
