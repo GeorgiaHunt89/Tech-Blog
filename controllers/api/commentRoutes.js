@@ -53,3 +53,28 @@ router.put('/', withAuth, async (req, res) => {
     }
   });
 
+
+// DELETE COMMENT
+router.delete('/:id', withAuth, (req, res) => {
+    try {
+        const deleteComment = await Comment.destroy({
+            where: {
+                id: req.params.id,
+            },
+        })
+        if (!deleteComment) {
+            res
+              .status(400)
+              .json({ message: 'Incorrect id, please try again' });
+            return;
+          }
+          res.status(200).json(deleteComment);
+      
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  });
+  
+  
+  module.exports = router;
+
