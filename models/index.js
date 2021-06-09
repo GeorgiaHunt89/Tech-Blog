@@ -1,6 +1,7 @@
 const user = require('./user');
 const post = require('./post');
 const comment = require('./comment');
+const tag = require('./tag');
 
 // HasMany
 user.hasMany(post, {
@@ -35,3 +36,27 @@ comment.belongsTo(user, {
 
 
 
+// BelongsToMany
+post.belongsToMany(tag, {
+    foreignKey: 'post_id',
+    through: 'post_tags',
+    timestamps:false,
+});
+
+tag.belongsToMany(post, {
+    foreignKey: 'tag_id',
+    through: 'tag_tags',
+    timestamps:false,
+});
+
+user.belongsToMany(post, {
+    foreignKey: 'user_id',
+    through: 'user_posts',
+    timestamps:false,
+});
+
+user.belongsToMany(comment, {
+    foreignKey: 'user_id',
+    through: 'user_comments',
+    timestamps:false,
+});
