@@ -7,8 +7,8 @@ const sequelize = require('../../config/connection');
 router.get('/', async (req, res) => {
 
     try {
-      const allComments = await Comment.findAll({})
-      res.status(200).json(allComments);
+      const allComment = await Comment.findAll({})
+      res.status(200).json(allComment);
     } catch (err) {
       res.status(400).json(err);
     }
@@ -28,3 +28,28 @@ router.post('/', withAuth, async (req, res) => {
   res.status(400).json(err);
 }
 });
+
+
+// UPDATE COMMENTS
+router.put('/', withAuth, async (req, res) => {
+    try {
+      const updateComment = await Comment.create({
+        post_id: req.body.post_id,
+        comment_text: req.body.comment_text,
+      },
+      {
+          where: {
+            id: req.params.id
+          },
+    });
+    if (!updateComment) {
+        res.status(404).json({ message: 'No comment found with this id!' });
+        return;
+      }
+  
+      res.status(200).json(updateComment);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
