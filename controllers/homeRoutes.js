@@ -1,10 +1,11 @@
 // Contains all user-facing routes
 const router = require('express').Router();
 const { Post, User, Comment } = require('../models');
+const withAuth = require('../utils/auth');
 const sequelize = require('./config/connection');
 
 // GET POST renders all posts to homepage
-router.get('/', async (req, res) => {
+router.get('/', withAuth, async (req, res) => {
     console.log(req.session);
   try {
     // Get all posts and JOIN with user data
@@ -45,7 +46,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET POST renders login page
-router.get('/login', (req, res) => {
+router.get('/login', withAuth, (req, res) => {
     // If the user is already logged in, redirect the request to another route
     if (req.session.logged_in) {
       res.redirect('/profile');
@@ -56,7 +57,7 @@ router.get('/login', (req, res) => {
   });
 
 // GET POST renders a single post to a page
-router.get('/post/:id', async (req, res) => {
+router.get('/post/:id', withAuth, async (req, res) => {
 
     const postData = await Post.findOne({
         where: { 
@@ -94,8 +95,7 @@ router.get('/post/:id', async (req, res) => {
     const post = postData.get({ plain: true });
 
     // Passes the data to the template
-    res.render('single-post', {
-      ...post,
+    res.render('single-post', { post,
       logged_in: req.session.logged_in
     })
 
