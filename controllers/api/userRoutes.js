@@ -5,7 +5,7 @@ const withAuth = require('../../utils/auth');
 // CREATE new user
 router.post('/', async (req, res) => {
     try {
-      const userData = await User.create({
+      const newUser = await User.create({
           username:req.body.username,
           email: req.body.email,
           password: req.body.password
@@ -25,19 +25,20 @@ router.post('/', async (req, res) => {
     }
   });
 
+
  // LOG IN & VERIFY user
  router.post('/login', async (req, res) => {
     try {
-      const userData = await User.findOne({ where: { email: req.body.email } });
+      const user = await User.findOne({ where: { email: req.body.email } });
   
-      if (!userData) {
+      if (!user) {
         res
           .status(400)
           .json({ message: 'Incorrect email or password, please try again' });
         return;
       }
   
-      const validPassword = await userData.checkPassword(req.body.password);
+      const validPassword = await user.checkPassword(req.body.password);
   
       if (!validPassword) {
         res
@@ -52,13 +53,14 @@ router.post('/', async (req, res) => {
         req.session.user = userDetails;
         req.session.logged_in = true;
         
-        res.json({ user: userData, message: 'You are now logged in!' });
+        res.json({ user: userDetails, message: 'You are now logged in!' });
       });
   
     } catch (err) {
       res.status(400).json(err);
     }
   });
+
 
  // LOG OUT
  router.post('/logout', withAuth, (req, res) => {
@@ -71,22 +73,23 @@ router.post('/', async (req, res) => {
     }
   });
 
+
 // UPDATE USER
 router.put('/:id', withAuth, (req, res) => {
     try {
-        const userData = await User.update(req.body, {
+        const userUpdate = await User.update(req.body, {
             individualHooks: true,
             where: {
                 id: req.params.id
             }
         })
-        if (!userData) {
+        if (!userUpdate) {
             res
               .status(400)
               .json({ message: 'Incorrect user id, please try again' });
             return;
           }
-          res.status(200).json(userDetails);
+          res.status(200).json(userUpdate);
       
     } catch (err) {
       res.status(400).json(err);
@@ -97,18 +100,18 @@ router.put('/:id', withAuth, (req, res) => {
 // DELETE USER
 router.delete('/:id', withAuth, (req, res) => {
     try {
-        const userData = await User.destroy({
+        const userDelete = await User.destroy({
             where: {
                 id: req.params.id
             }
         })
-        if (!userData) {
+        if (!userDelete) {
             res
               .status(400)
               .json({ message: 'Incorrect user id, please try again' });
             return;
           }
-          res.status(200).json(userDetails);
+          res.status(200).json(userDelete);
       
     } catch (err) {
       res.status(400).json(err);
@@ -116,10 +119,11 @@ router.delete('/:id', withAuth, (req, res) => {
   });
 
 
-// DISPLAY USER DATA
-router.get('/', (req, res) => {
+// DISPLAY ACCOUNT DATA ON CLIENT SIDE
+router.get('/data', (req, res) => {
     try {
-        const userData = await User.findAll({    
+        const userData = await User.findOne({ 
+            where: { email: req.body.email },   
             attributes: { exclude: ['[password']}
         })
         if (!userData) {
@@ -128,12 +132,13 @@ router.get('/', (req, res) => {
               .json({ message: 'Error' });
             return;
           }
-          res.status(200).json(userDetails);
+          res.status(200).json(userData);
       
     } catch (err) {
       res.status(400).json(err);
     }
   });
+  
 
   module.exports = router;
    
