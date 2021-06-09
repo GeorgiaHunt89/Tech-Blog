@@ -120,7 +120,7 @@ router.delete('/:id', withAuth, (req, res) => {
 
 
 // DISPLAY ACCOUNT DATA ON CLIENT SIDE
-router.get('/data', (req, res) => {
+router.get('/dashboard', (req, res) => {
     try {
         const userData = await User.findOne({ 
             where: { email: req.body.email },   
