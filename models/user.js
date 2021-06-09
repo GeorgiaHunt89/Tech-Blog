@@ -1,17 +1,17 @@
 'use strict';
 const bcrypt = require('bcryptjs');
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes} = require('sequelize');
 const sequelize = require('../config/connection');
 
 // Creates User model
-class User extends Model {
+class user extends Model {
     validPassword(password) {
         return bcrypt.compareSync(password, this.password);
     }
 }
 
 // Defines table fields
-User.init(
+user.init(
     {
         // Creates ID Column (Primary Key)
         id: {
@@ -23,23 +23,23 @@ User.init(
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-          },
-          email: {
+        },
+        email: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
             validate: {
               isEmail: true,
             },
-          },
-          password: {
+        },
+        password: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
               len: [8],
             },
-          },
         },
+    },
     
     // Hash password automatically before User is created / updated 
     {
@@ -63,4 +63,4 @@ User.init(
   }
 );
 
-module.exports = User;
+module.exports = user;

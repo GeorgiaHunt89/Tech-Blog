@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 class tag extends Model {}
 
-// Creates fields/columns for User model
+// Creates fields/columns for tag model
 tag.init(
     {
         name: {
