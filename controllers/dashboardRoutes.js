@@ -79,7 +79,7 @@ router.get('/edit/:id', withAuth, async (req, res) => {
 });
 
 // Renders new post page
-router.get('./newpost', (req, res) => {
+router.get('./newPost', (req, res) => {
   res.render('new-posts');
 });
 
