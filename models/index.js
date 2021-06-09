@@ -60,3 +60,11 @@ user.belongsToMany(comment, {
     through: 'user_comments',
     timestamps:false,
 });
+
+
+module.exports = {
+    user,
+    post,
+    comment,
+    tag,
+};
