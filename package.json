@@ -1,0 +1,33 @@
+{
+  "name": "tech-blog",
+  "version": "1.0.0",
+  "description": "A tech Blog",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgiaHunt89/Tech-Blog.git"
+  },
+  "author": "Georgia Hunt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeorgiaHunt89/Tech-Blog/issues"
+  },
+  "homepage": "https://github.com/GeorgiaHunt89/Tech-Blog#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "connect-session-sequelize": "^7.1.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.3.2",
+    "express-session": "^1.17.2",
+    "helpers": "0.0.6",
+    "jest": "^27.0.4",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2"
+  }
+}
