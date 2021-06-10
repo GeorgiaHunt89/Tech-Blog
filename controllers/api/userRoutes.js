@@ -1,6 +1,7 @@
 const router = require('express').Router();   
 const { User } = require('../../models');
 const withAuth = require('../../utils/auth');
+const sequelize = require('../../config/connection');
 
 // CREATE new user
 router.post('/', async (req, res) => {
@@ -75,7 +76,7 @@ router.post('/', async (req, res) => {
 
 
 // UPDATE USER
-router.put('/:id', withAuth, (req, res) => {
+router.put('/:id', withAuth, async (req, res) => {
     try {
         const userUpdate = await User.update(req.body, {
             individualHooks: true,
@@ -98,7 +99,7 @@ router.put('/:id', withAuth, (req, res) => {
 
 
 // DELETE USER
-router.delete('/:id', withAuth, (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
     try {
         const userDelete = await User.destroy({
             where: {
@@ -120,7 +121,7 @@ router.delete('/:id', withAuth, (req, res) => {
 
 
 // DISPLAY ACCOUNT DATA ON CLIENT SIDE
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', async (req, res) => {
     try {
         const userData = await User.findOne({ 
             where: { email: req.body.email },   
