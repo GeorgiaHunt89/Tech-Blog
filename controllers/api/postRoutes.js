@@ -79,7 +79,7 @@ router.put('/', withAuth, async (req, res) => {
 
 
 // DELETE POST
-router.delete('/:id', withAuth, (req, res) => {
+router.delete('/:id', withAuth, async (req, res) => {
   try {
       const deletePost = await User.destroy({
           where: {
@@ -100,5 +100,6 @@ router.delete('/:id', withAuth, (req, res) => {
   }
 });
 
-  module.exports = router;
+
+module.exports = router;
     
