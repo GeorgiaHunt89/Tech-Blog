@@ -1,6 +1,6 @@
 // Routes
 const router = require("express").Router();
-const { post, user, comment } = require("../models");
+const { Post, User, Comment } = require("../models");
 const withAuth = require("../utils/auth");
 
 // Dashboard displaying posts by logged in user
@@ -8,11 +8,14 @@ const withAuth = require("../utils/auth");
 router.get("/", withAuth, async (req, res) => {
   try {
     // Find the logged in user based on the session ID
-    const postData = await post.findByPk(req.session.user_id, {
+    const postData = await Post.findAll({
+      where: {
+        user_id: req.session.user_id,
+      },
       attributes: ["id", "post_text", "title", "created_at"],
       include: [
         {
-          model: comment,
+          model: Comment,
           attributes: [
             "id",
             "comment_text",
@@ -21,16 +24,16 @@ router.get("/", withAuth, async (req, res) => {
             "created_at",
           ],
           include: {
-            model: user,
+            model: User,
             attributes: ["username"],
           },
         },
       ],
     });
 
-    const displayPost = postData.get({ plain: true });
+    const posts = postData.get((post) => post.get({ plain: true }));
 
-    res.render("dashboard", { displayPost, logged_in: true });
+    res.render("dashboard", { posts, logged_in: req.session.logged_in });
   } catch (err) {
     res.status(500).json(err);
   }
@@ -41,11 +44,11 @@ router.get("/", withAuth, async (req, res) => {
 router.get("/edit/:id", withAuth, async (req, res) => {
   try {
     // Find the logged in user based on the session ID
-    const postData = await post.findByPk(req.session.user_id, {
+    const postData = await Post.findByPk(req.params.id, {
       attributes: ["id", "post_text", "title", "created_at"],
       include: [
         {
-          model: comment,
+          model: Comment,
           attributes: [
             "id",
             "comment_text",
@@ -54,18 +57,18 @@ router.get("/edit/:id", withAuth, async (req, res) => {
             "created_at",
           ],
           include: {
-            model: user,
+            model: User,
             attributes: ["username"],
           },
         },
       ],
     });
 
-    const editPost = postData.get({ plain: true });
+    const posts = postData.get({ plain: true });
 
-    res.render("editPosts", { editPost, logged_in: true });
+    res.render("editPosts", { posts, logged_in: true });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(400).json(err);
   }
 });
 
