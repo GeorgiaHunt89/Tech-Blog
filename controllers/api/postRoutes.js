@@ -4,95 +4,93 @@ const withAuth = require("../../utils/auth");
 
 // GET POST renders all posts
 router.get("/", async (req, res) => {
-  try {
-    const postData = await Post.findAll({
-      attributes: ["id", "post_text", "title", "created_at"],
-      // Displays posts from most recent
-      order: [["created_at", "DESC"]],
-      include: [
-        {
-          model: Comment,
-          attributes: [
-            "id",
-            "comment_text",
-            "post_id",
-            "user_id",
-            "created_at",
-          ],
-          include: {
-            model: User,
-            attributes: ["username"],
-          },
-        },
-        {
+  console.log("======================");
+
+  const postData = await Post.findAll({
+    attributes: ["id", "post_text", "title", "created_at"],
+    // displays posts from most recent
+    order: [["created_at", "DESC"]],
+    // JOIN to the User table
+    include: [
+      {
+        model: Comment,
+        attributes: ["id", "comment_text", "post_id", "user_id", "created_at"],
+        include: {
           model: User,
           attributes: ["username"],
         },
-      ],
+      },
+      {
+        model: User,
+        attributes: ["username"],
+      },
+    ],
+  })
+    .then((postData) => res.json(postData))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
     });
-    res.status(200).json(postData);
-  } catch (err) {
-    res.status(400).json(err);
-  }
 });
 
 // CREATE POST
 router.post("/", withAuth, async (req, res) => {
-  try {
-    const newPost = await Post.create({
-      title: req.body.title,
-      post_text: req.body.post_text,
-      user_id: req.session.user_id,
+  const newPost = await Post.create({
+    title: req.body.title,
+    post_text: req.body.post_text,
+    user_id: req.session.user_id,
+  })
+    .then((newPost) => res.json(newPost))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
     });
-
-    res.status(200).json(newPost);
-  } catch (err) {
-    res.status(400).json(err);
-  }
 });
 
 // UPDATE POST
-router.put("/", withAuth, async (req, res) => {
-  try {
-    const updatePost = await Post.update(
-      {
-        title: req.body.title,
-        post_text: req.body.post_text,
+router.put("/:id", withAuth, async (req, res) => {
+  const updatePost = await Post.update(
+    {
+      title: req.body.title,
+      post_text: req.body.post_text,
+    },
+    {
+      where: {
+        id: req.params.id,
       },
-      {
-        where: {
-          id: req.params.id,
-        },
-      }
-    );
-    if (!updatePost) {
-      res.status(404).json({ message: "No post found with this id!" });
-      return;
     }
-
-    res.status(200).json(updatePost);
-  } catch (err) {
-    res.status(500).json(err);
-  }
+  )
+    .then((updatePost) => {
+      if (!updatePost) {
+        res.status(404).json({ message: "No post found with this id" });
+        return;
+      }
+      res.json(updatePost);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 });
 
 // DELETE POST
-router.delete("/:id", async (req, res) => {
-  try {
-    const deletePost = await User.destroy({
-      where: {
-        id: req.params.id,
-        user_id: req.session.user_id,
-      },
+router.delete("/:id", withAuth, async (req, res) => {
+  const deletePost = await Post.destroy({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((deletePost) => {
+      if (!deletePost) {
+        res.status(404).json({ message: "No post found with this id" });
+        return;
+      }
+      res.json(deletePost);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
     });
-    if (!deletePost) {
-      res.status(400).json({ message: "Incorrect id, please try again" });
-      return;
-    }
-    res.status(200).json(deletePost);
-  } catch (err) {
-    res.status(400).json(err);
-  }
 });
 
 module.exports = router;
