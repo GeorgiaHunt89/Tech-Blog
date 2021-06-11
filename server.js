@@ -12,7 +12,7 @@ const hbs = exphbs.create({ helpers });
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
-const PORT = process.env.PORT || 4234;
+const PORT = process.env.PORT || 3452;
 
 // Creates session
 const sess = {
@@ -33,7 +33,7 @@ app.set("view engine", "handlebars");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 // Activates routes
 app.use(routes);
