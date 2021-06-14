@@ -12,7 +12,7 @@ const hbs = exphbs.create({ helpers });
 const SequelizeStore = require("connect-session-sequelize")(session.Store);
 
 const app = express();
-const PORT = process.env.PORT || 3452;
+const PORT = process.env.PORT || 5432;
 
 // Creates session
 const sess = {

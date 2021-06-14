@@ -10,7 +10,7 @@ const editFormHandler = async (event) => {
 
   if (title && post_text && id) {
     // send a PUT request to the API endpoint
-    const response = await fetch(`/api/post/${id}`, {
+    const response = await fetch(`/api/posts/${id}`, {
       method: "PUT",
       body: JSON.stringify({
         title,
