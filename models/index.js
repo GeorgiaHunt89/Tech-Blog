@@ -1,35 +1,65 @@
-const User = require("./users");
-const Post = require("./posts");
-const Comment = require("./comments");
+const user = require("./users");
+const post = require("./posts");
+const comment = require("./comments");
+const tag = require("./tags");
 
-// users can make many posts
-User.hasMany(Post, {
+// HasMany
+user.hasMany(post, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+});
+
+user.hasMany(comment, {
+  foreignKey: "user_id",
+  onDelete: "CASCADE",
+});
+
+post.hasMany(comment, {
+  foreignKey: "post_id",
+  onDelete: "CASCADE",
+});
+
+// BelongsTo
+post.belongsTo(user, {
   foreignKey: "user_id",
 });
 
-// a post can only belong to one user
-Post.belongsTo(User, {
-  foreignKey: "user_id",
-});
-
-// a comment can only belong to one user
-Comment.belongsTo(User, {
-  foreignKey: "user_id",
-});
-
-// a comment can only belong to one user
-Comment.belongsTo(Post, {
+comment.belongsTo(post, {
   foreignKey: "post_id",
 });
 
-// users can make many comments
-User.hasMany(Comment, {
+comment.belongsTo(user, {
   foreignKey: "user_id",
 });
 
-// users can make many posts
-Post.hasMany(Comment, {
+// BelongsToMany
+post.belongsToMany(tag, {
   foreignKey: "post_id",
+  through: "post_tags",
+  timestamps: false,
 });
 
-module.exports = { User, Post, Comment };
+tag.belongsToMany(post, {
+  foreignKey: "tag_id",
+  through: "tag_tags",
+  timestamps: false,
+});
+
+user.belongsToMany(post, {
+  foreignKey: "user_id",
+  through: "user_posts",
+  timestamps: false,
+});
+
+user.belongsToMany(comment, {
+  foreignKey: "user_id",
+  through: "user_comments",
+  timestamps: false,
+});
+
+module.exports = {
+  user,
+  post,
+  comment,
+  tag,
+};
