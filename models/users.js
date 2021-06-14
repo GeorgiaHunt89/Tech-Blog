@@ -1,12 +1,11 @@
-"use strict";
 const bcrypt = require("bcryptjs");
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
 // Creates User model
 class User extends Model {
-  validPassword(password) {
-    return bcrypt.compareSync(password, this.password);
+  validPassword(loginPassword) {
+    return bcrypt.compareSync(loginPassword, this.password);
   }
 }
 
@@ -36,7 +35,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [8],
+        len: [4],
       },
     },
   },
@@ -44,21 +43,19 @@ User.init(
   // Hash password automatically before User is created / updated
   {
     hooks: {
-      beforeCreate(newUser) {
-        newUser.password = bcrypt.hashSync(
-          newUser.password,
+      async beforeCreate(newUserData) {
+        newUserData.password = await bcrypt.hashSync(
+          newUserData.password,
           bcrypt.genSaltSync(10)
         );
-        return newUser;
+        return newUserData;
       },
-      beforeUpdate(updateUser) {
-        if (updateUser.password) {
-          updateUser.password = bcrypt.hashSync(
-            updatedUser.password,
-            bcrypt.genSaltSync(10)
-          );
-        }
-        return updateUser;
+      async beforeUpdate(updateUserData) {
+        updateUserData.password = await bcrypt.hashSync(
+          updatedUserData.password,
+          bcrypt.genSaltSync(10)
+        );
+        return updateUserData;
       },
     },
     sequelize,
