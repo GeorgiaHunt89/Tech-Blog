@@ -66,7 +66,7 @@ router.get("/edit/:id", withAuth, async (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).json(err);
-    });
+    })
 });
 
 // Renders new post page

@@ -1,4 +1,3 @@
-
 {{#if posts.length}}
 <section>
   <h2>Your Posts</h2>
@@ -6,13 +5,13 @@
     {{#each posts as |post|}}
     <ul>
       <article class="post">
-    <div class="title">
-       <a href="/post/{{id}}">{{title}}</a>
-    </div>
-    <div class="meta">
-        <strong>Posted by {{user.username}} on {{format_date created_at}}</strong>
-    </div>
-    </article>
+        <div class="title">
+          <a href="/post/{{id}}">{{title}}</a>
+        </div>
+        <div class="meta">
+          <strong>Posted by {{user.username}} on {{format_date created_at}}</strong>
+        </div>
+      </article>
       <a href="/dashboard/edit/{{post.id}}" class="edit-link">Edit post</a>
     </ul>
     {{/each}}
@@ -22,5 +21,5 @@
 
 
 <div>
-    <button type="submit"><a href="/dashboard/newPost" class="create-btn">Create New Post</a></button>
+  <button type="submit"><a href="/dashboard/newPost" class="create-btn">Create New Post</a></button>
 </div>
