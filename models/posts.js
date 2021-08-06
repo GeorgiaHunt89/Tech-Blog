@@ -2,9 +2,9 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
 // Creates Post model
-class Post extends Model {}
+class Posts extends Model {}
 // Defines table fields
-Post.init(
+Posts.init(
   {
     // Creates ID Column (Primary Key)
     id: {
@@ -29,7 +29,7 @@ Post.init(
     user_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: "user",
+        model: "users",
         key: "id",
       },
     },
@@ -43,4 +43,4 @@ Post.init(
   }
 );
 
-module.exports = Post;
+module.exports = Posts;

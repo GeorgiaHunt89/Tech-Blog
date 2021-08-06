@@ -35,6 +35,7 @@ router.get("/", async (req, res) => {
 
 // CREATE POST
 router.post("/", withAuth, async (req, res) => {
+  console.log('newPost');
   const newPost = await Post.create({
     title: req.body.title,
     post_text: req.body.post_text,
