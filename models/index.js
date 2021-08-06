@@ -1,65 +1,51 @@
-const user = require("./users");
-const post = require("./posts");
-const comment = require("./comments");
-const tag = require("./tags");
+const Users = require("./users");
+const Posts = require("./posts");
+const Comments = require("./comments");
 
 // HasMany
-user.hasMany(post, {
+Users.hasMany(Posts, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
 });
 
-user.hasMany(comment, {
+Users.hasMany(Comments, {
   foreignKey: "user_id",
   onDelete: "CASCADE",
 });
 
-post.hasMany(comment, {
+Posts.hasMany(Comments, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
 });
 
 // BelongsTo
-post.belongsTo(user, {
+Posts.belongsTo(Users, {
   foreignKey: "user_id",
 });
 
-comment.belongsTo(post, {
+Comments.belongsTo(Posts, {
   foreignKey: "post_id",
 });
 
-comment.belongsTo(user, {
+Comments.belongsTo(Users, {
   foreignKey: "user_id",
 });
 
 // BelongsToMany
-post.belongsToMany(tag, {
-  foreignKey: "post_id",
-  through: "post_tags",
-  timestamps: false,
-});
-
-tag.belongsToMany(post, {
-  foreignKey: "tag_id",
-  through: "tag_tags",
-  timestamps: false,
-});
-
-user.belongsToMany(post, {
+Users.belongsToMany(Posts, {
   foreignKey: "user_id",
   through: "user_posts",
   timestamps: false,
 });
 
-user.belongsToMany(comment, {
+Users.belongsToMany(Comments, {
   foreignKey: "user_id",
   through: "user_comments",
   timestamps: false,
 });
 
 module.exports = {
-  user,
-  post,
-  comment,
-  tag,
+  Users,
+  Posts,
+  Comments,
 };

@@ -1,27 +1,39 @@
-const loginFormHandler = async (event) => {
+// Getting references to our form and inputs
+const $loginForm = document.querySelector("form.login");
+
+// When the form is submitted, we validate there's an email and password entered
+$loginForm.addEventListener("submit", (event) => {
   event.preventDefault();
-
   // Collect values from the login form
-  const email = document.querySelector("#email-login").value.trim();
-  const password = document.querySelector("#password-login").value.trim();
+  const email = document.querySelector("#email").value;
+  const password = document.querySelector("#password").value;
 
-  if (email && password) {
-    // Send a POST request to the API endpoint
-    const response = await fetch("/api/users/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (response.ok) {
-      // If successful, redirect the browser to the dashboard page
-      document.location.replace("/dashboard");
-    } else {
-      alert(response.statusText);
-    }
+  if (!email || !password) {
+    return;
   }
-};
 
-document
-  .querySelector(".login-form")
-  .addEventListener("submit", loginFormHandler);
+  // If we have an email and password we run the loginUser function and clear the form
+  loginUser({ email, password });
+  event.target.reset();
+});
+
+// loginUser does a post to our "api/login" route and if successful, redirects us the the members page
+function loginUser({ email, password }) {
+  fetch("/api/users/login", {
+    method: "POST",
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((r) => r.json())
+    .then(() => {
+      window.location.replace("/dashboard");
+    })
+    .catch((err) => {
+      console.error(err.responseText);
+    });
+}

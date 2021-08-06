@@ -1,17 +1,38 @@
-<form class="login-form">
-  <div>
-    <label for="email-login">Email:</label>
-    <input type="text" id="email-login" />
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+  <link href="/css/login.css" rel="stylesheet">
+</head>
+<div class="flex justify-center">
+  <div class="w-full md:w-1/2">
+    <h2 class="ten">Login Form</h2>
+    <form class="login">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <p class="control has-icons-left has-icons-right">
+          <input class="input" name="email" id="email" type="email" placeholder="Email">
+          <span class="icon is-small is-left">
+            <i class="fas fa-envelope"></i>
+          </span>
+          <span class="icon is-small is-right">
+            <i class="fas fa-check"></i>
+          </span>
+        </p>
+      </div>
   </div>
-  <div>
-    <label for="password-login">Password:</label>
-    <input type="password" id="password-login" />
+  <div class="form-group">
+    <label for="password">Password</label>
+    <p class="control has-icons-left">
+      <input class="input" name="password" id="password" type="password" placeholder="Password">
+      <span class="icon is-small is-left">
+        <i class="fas fa-lock"></i>
+      </span>
+    </p>
   </div>
-  <div>
-    <button type="submit">Login</button>
-  </div>
-  <div class ="sign-up">
-      Not a member? <a href="/signup">Sign Up now!</a>
-  </div>
+  </form>
 
-  <script src="/js/login.js"></script>
+  <button type="submit" class="btn btn-dark">Login</button>
+  <br>
+  <p>Or sign up <a href="/signup">here</a></p>
+
+  <!-- javascript file-->
+  <script type="text/javascript" src="/public/js/login.js"></script>

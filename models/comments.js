@@ -2,9 +2,9 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
 // Creates Comment model
-class Comment extends Model {}
+class Comments extends Model {}
 // Defines table fields
-Comment.init(
+Comments.init(
   {
     // Creates ID Column (Primary Key)
     id: {
@@ -25,14 +25,14 @@ Comment.init(
     user_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: "user",
+        model: "users",
         key: "id",
       },
     },
     post_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: "post",
+        model: "posts",
         key: "id",
       },
     },
@@ -46,4 +46,4 @@ Comment.init(
   }
 );
 
-module.exports = Comment;
+module.exports = Comments;

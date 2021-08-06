@@ -2,37 +2,6 @@ const router = require("express").Router();
 const { User, Post, Comment } = require("../../models");
 const withAuth = require("../../utils/auth");
 
-// GET Route to access users
-router.get("/", async (req, res) => {
-  const user = await User.findAll({
-    attributes: { exclude: ["[password"] },
-  })
-    .then((dbUserData) => res.json(dbUserData))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-});
-
-// CREATE A NEW USER
-router.post("/", async (req, res) => {
-  const user = await User.create({
-    username: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-  })
-    // UserData stores user login during session
-    .then((dbUserData) => {
-      req.session.save(() => {
-        req.session.user_id = dbUserData.id;
-        req.session.username = dbUserData.username;
-        req.session.loggedIn = true;
-
-        res.json(dbUserData);
-      });
-    });
-});
-
 // LOG IN & VERIFY USER
 router.post("/login", async (req, res) => {
   const user = await User.findOne({
@@ -41,20 +10,18 @@ router.post("/login", async (req, res) => {
     },
   }).then((dbUserData) => {
     if (!dbUserData) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
+      res.status(400).json({ message: "No user account found!" });
       return;
     }
-    // ValidPassword verifies user password
-    const validPassword = dbUserData.checkPassword(req.body.password);
+
+    // VALIDATE USER WITH VALID PASSWORD
+    const validPassword = user.validPassword(req.body.password);
 
     if (!validPassword) {
-      res
-        .status(400)
-        .json({ message: "Incorrect email or password, please try again" });
+      res.status(402).json({ message: "No user account found!" });
       return;
     }
+
     req.session.save(() => {
       // user data stored during session
       req.session.user_id = dbUserData.id;
@@ -66,7 +33,29 @@ router.post("/login", async (req, res) => {
   });
 });
 
-// LOG OUT
+// CREATE A NEW USER
+router.post("/", async (req, res) => {
+  console.log("new user");
+  const user = await User.create({
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password,
+  })
+
+    // UserData stores user login during session
+    .then((dbUserData) => {
+      console.log(dbUserData);
+      req.session.save(() => {
+        req.session.user_id = dbUserData.id;
+        req.session.username = dbUserData.username;
+        req.session.loggedIn = true;
+
+        res.json(dbUserData);
+      });
+    });
+});
+
+// LOGOUT
 router.post("/logout", withAuth, (req, res) => {
   if (req.session.loggedIn) {
     req.session.destroy(() => {
@@ -77,7 +66,7 @@ router.post("/logout", withAuth, (req, res) => {
   }
 });
 
-// UPDATE USER
+// UPDATE THE USER
 router.put("/:id", withAuth, async (req, res) => {
   const user = awaitUser
     .update(req.body, {
@@ -101,7 +90,7 @@ router.put("/:id", withAuth, async (req, res) => {
     });
 });
 
-// DELETE USER
+// DELETE THE USER
 router.delete("/:id", withAuth, async (req, res) => {
   const user = await User.destroy({
     where: {
@@ -123,7 +112,7 @@ router.delete("/:id", withAuth, async (req, res) => {
     });
 });
 
-// DISPLAY ACCOUNT DATA ON CLIENT SIDE
+// DISPLAYS ACCOUNT ON CLIENT SIDE
 router.get("/dashboard", async (req, res) => {
   const user = await User.findOne({
     where: { email: req.body.email },

@@ -28,6 +28,7 @@ router.get("/", withAuth, async (req, res) => {
   })
     .then((dbPostData) => {
       const posts = dbPostData.map((post) => post.get({ plain: true }));
+      console.log(posts);
       res.render("dashboard", { posts, loggedIn: true });
     })
     .catch((err) => {
@@ -69,7 +70,7 @@ router.get("/edit/:id", withAuth, async (req, res) => {
 });
 
 // Renders new post page
-router.get("./newPost", (req, res) => {
+router.get("/newPost", (req, res) => {
   res.render("newPost");
 });
 

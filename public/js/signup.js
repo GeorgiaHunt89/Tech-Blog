@@ -1,10 +1,11 @@
+// When the signup button is clicked, we validate the email and password are not blank
 const signupFormHandler = async (event) => {
   event.preventDefault();
 
   // Collect values from the login form
-  const username = document.querySelector("#username-signup").value.trim();
-  const email = document.querySelector("#email-signup").value.trim();
-  const password = document.querySelector("#password-signup").value.trim();
+  const email = document.querySelector("#email").value;
+  const username = document.querySelector("#username").value;
+  const password = document.querySelector("#password").value;
 
   if (username && email && password) {
     // Send a POST request to the API endpoint
@@ -24,6 +25,4 @@ const signupFormHandler = async (event) => {
   }
 };
 
-document
-  .querySelector(".signup-form")
-  .addEventListener("submit", signupFormHandler);
+document.querySelector(".signup").addEventListener("submit", signupFormHandler);

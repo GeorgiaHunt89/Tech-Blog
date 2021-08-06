@@ -3,22 +3,16 @@ const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/connection");
 
 // Creates User model
-class User extends Model {
-  validPassword(loginPassword) {
-    return bcrypt.compareSync(loginPassword, this.password);
+class Users extends Model {
+  validPassword(password) {
+    return bcrypt.compareSync(password, this.password);
   }
 }
 
 // Defines table fields
-User.init(
+Users.init(
   {
     // Creates ID Column (Primary Key)
-    id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -34,36 +28,30 @@ User.init(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: [4],
-      },
     },
   },
 
   // Hash password automatically before User is created / updated
   {
     hooks: {
-      async beforeCreate(newUserData) {
-        newUserData.password = await bcrypt.hashSync(
-          newUserData.password,
+      async beforeCreate(user) {
+        user.password = await bcrypt.hash(
+          user.password,
           bcrypt.genSaltSync(10)
         );
-        return newUserData;
+        return user;
       },
-      async beforeUpdate(updateUserData) {
-        updateUserData.password = await bcrypt.hashSync(
-          updatedUserData.password,
+      async beforeUpdate(user) {
+        user.password = await bcrypt.hash(
+          user.password,
           bcrypt.genSaltSync(10)
         );
-        return updateUserData;
+        return user;
       },
     },
     sequelize,
-    timestamps: false,
-    freezeTableName: true,
-    underscored: true,
     modelName: "user",
   }
 );
 
-module.exports = User;
+module.exports = Users;
