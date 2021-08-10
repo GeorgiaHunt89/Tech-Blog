@@ -46,7 +46,7 @@ Georgia Hunt
 
 Walk through video demonstrating the application in action.
 
-- ![Tech Blog Walkthrough Gif](https://github.com/GeorgiaHunt89/Tech-Blog/blob/main/Images/MyTechBlogWalkthroughGif.gif?raw=true)
+- ![Tech Blog Walkthrough Gif](https://github.com/GeorgiaHunt89/Tech-Blog/blob/main/public/img/MyTechBlogWalkthroughGif.gif?raw=true)
 
 ## Deployment Link
 
