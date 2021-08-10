@@ -38,14 +38,20 @@ This project is designed to provide the user with an easy to update Tech Blog, w
 
 Georgia Hunt
 
+- 💼 [Portfolio](https://georgiahunt89.github.io/Georgia-Hunt-Portfolio/)<br>
+- [GitHub](https://github.com/GeorgiaHunt89/)<br>
+- [LinkedIn](https://www.linkedin.com/in/georgialhunt)
+
 ## Application Walk through video
 
 Walk through video demonstrating the application in action.
 
+- ![Tech Blog Walkthrough Gif](https://github.com/GeorgiaHunt89/Tech-Blog/blob/main/Images/MyTechBlogWalkthroughGif.gif?raw=true)
+
 ## Deployment Link
 
-(GitHub Repo)[https://github.com/GeorgiaHunt89/Tech-Blog]
-(Heroku)[https://gh-tech-blog.herokuapp.com/]
+Github: [Workout-Tracker-GitHub](https://github.com/GeorgiaHunt89/workout-tracker)<br>
+Heroku: [Workout-Tracker-Heroku](https://gh-workout-tracker.herokuapp.com/)
 
 ## Questions
 
