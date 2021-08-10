@@ -50,7 +50,7 @@ Users.init(
       },
     },
     sequelize,
-    modelName: "user",
+    modelName: "users",
   }
 );
 

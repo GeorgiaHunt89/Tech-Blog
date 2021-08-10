@@ -45,7 +45,7 @@ Users.belongsToMany(Comments, {
 });
 
 module.exports = {
-  Users,
-  Posts,
-  Comments,
+  User: Users,
+  Post: Posts,
+  Comment: Comments,
 };
